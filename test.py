@@ -23,7 +23,7 @@ def tester(encoder, classifier, discriminator, source_test_loader, target_test_l
         alpha = 2. / (1. + np.exp(-10 * p)) - 1
 
         # Process source and target data
-        source_image, source_label = process_data(source_data, expand_channels=True)
+        source_image, source_label = process_data(source_data, expand_channels=False)
         target_image, target_label = process_data(target_data)
 
         # Compute source and target predictions
@@ -43,7 +43,8 @@ def tester(encoder, classifier, discriminator, source_test_loader, target_test_l
             # Compute domain predictions
             domain_pred = compute_output(encoder, discriminator, combined_image, alpha=alpha)
             domain_correct += domain_pred.eq(domain_labels.data.view_as(domain_pred)).sum().item()
-
+    
+    # print(f"source_len:{source_test_loader.dataset}, target_len:{target_test_loader.dataset}")
     source_dataset_len = len(source_test_loader.dataset)
     target_dataset_len = len(target_test_loader.dataset)
 

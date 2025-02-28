@@ -18,7 +18,9 @@ class Extractor(nn.Module):
 
     def forward(self, x):
         x = self.extractor(x)
-        x = x.view(-1, 3 * 28 * 28)
+        # print(f"Before view shape: {x.shape}")  # Debug: 確保 batch_size 正確
+        x = x.view(-1, 3 * 224 * 224)
+        # print(f"After view shape: {x.shape}")  # Debug: 確保 batch_size 正確
         return x
 
 
@@ -26,7 +28,7 @@ class Classifier(nn.Module):
     def __init__(self):
         super(Classifier, self).__init__()
         self.classifier = nn.Sequential(
-            nn.Linear(in_features=3 * 28 * 28, out_features=100),
+            nn.Linear(in_features=3 * 224 * 224, out_features=100),
             nn.ReLU(),
             nn.Linear(in_features=100, out_features=100),
             nn.ReLU(),
@@ -42,7 +44,7 @@ class Discriminator(nn.Module):
     def __init__(self):
         super(Discriminator, self).__init__()
         self.discriminator = nn.Sequential(
-            nn.Linear(in_features=3 * 28 * 28, out_features=100),
+            nn.Linear(in_features=3 * 224 * 224, out_features=100),
             nn.ReLU(),
             nn.Linear(in_features=100, out_features=2)
         )

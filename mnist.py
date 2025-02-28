@@ -10,12 +10,17 @@ transform = transforms.Compose([transforms.ToTensor(),
 
 mnist_train_dataset = datasets.MNIST(root='../data/MNIST', train=True, download=True,
                                      transform=transform)
-mnist_valid_dataset = datasets.MNIST(root='../data/MNIST', train=True, download=True,
-                                     transform=transform)
+# mnist_valid_dataset = datasets.MNIST(root='../data/MNIST', train=True, download=True,
+#                                      transform=transform)
 mnist_test_dataset = datasets.MNIST(root='../data/MNIST', train=False, transform=transform)
 
 indices = list(range(len(mnist_train_dataset)))
 validation_size = 5000
+
+# 先打亂 indices
+import numpy as np
+np.random.shuffle(indices)
+
 train_idx, valid_idx = indices[validation_size:], indices[:validation_size]
 train_sampler = SubsetRandomSampler(train_idx)
 valid_sampler = SubsetRandomSampler(valid_idx)
@@ -28,9 +33,9 @@ mnist_train_loader = DataLoader(
 )
 
 mnist_valid_loader = DataLoader(
-    mnist_valid_dataset,
+    mnist_train_dataset,
     batch_size=params.batch_size,
-    sampler=train_sampler,
+    sampler=valid_sampler,
     num_workers=params.num_workers
 )
 
